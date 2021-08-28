@@ -1,0 +1,7 @@
+token_saida
+tabela_simbolos
+lista_erros
+analisador_lexico.spec
+dist
+build
+__pycache__
