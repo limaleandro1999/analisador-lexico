@@ -25,11 +25,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
       
-      - name: Package Application
-        uses: JackMcKew/pyinstaller-action-windows@main
-        with:
-          path: src
-      
       - name: Upload Executable
         uses: JackMcKew/pyinstaller-action-windows@main
         with:
