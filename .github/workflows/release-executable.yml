@@ -19,7 +19,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.ref }}/${{ steps.random-number-generator.outputs.random-id }}
+        tag_name: ${{ github.ref }}
         release_name: Release ${{ steps.date.outputs.date }}
         draft: false
         prerelease: false
