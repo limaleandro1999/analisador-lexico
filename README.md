@@ -15,7 +15,7 @@ python analisador_lexico.py
 ```
 
 Desta forma o programa utilizará o arquivo `teste-geral.c` localizado dentro de `/testes/geral` para fazer a análise léxica. A outra forma de rodar o 
-programa é passando como argumento o caminho do arquivo ".c" que se de seja analisar:
+programa é passando como argumento o caminho do arquivo `.c` que se de seja analisar:
 
 ```
 python analisador_lexico.py testes/geral/teste-geral-2.c
