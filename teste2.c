@@ -1,3 +1,7 @@
+/*
+    yrdyrer
+*/
+
 // Program to add two distances (feet-inch)
 #include <stdio.h>
 struct Distance
@@ -26,6 +30,47 @@ int main()
     sum.feet = dist1.feet + dist2.feet;
     // adding inches
     sum.inch = dist1.inch + dist2.inch;
+
+    int test3 = 3
+
+    test3 += 4
+    test3 -= 2
+    test3 *= 3
+    // adding inches
+    sum.inch = dist1.inch + dist2.inch;
+    test3 /=2
+
+    if (test3 == 2) {
+        printf("test 5");
+    }
+
+    if (test3 > 2) {
+        printf("test 7");
+    }
+
+    if (test3 < 4) {
+        printf("test 2");
+    }
+
+    if (test3 >= 4) {
+        printf("test 2");
+    }
+
+    if (test3 <= 4) {
+        printf("test 2");
+    }
+
+    if (test3 != 4) {
+        printf("test 2");
+    }
+
+    if (test3 != 4 && test3 > 2) {
+        printf("test 2");
+    }
+
+    if (test3 != 4 || test3 > 2) {
+        printf("test 2");
+    }
 
     // changing to feet if inch is greater than 12
     while (sum.inch >= 12) 
