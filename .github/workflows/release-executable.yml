@@ -70,6 +70,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.get_release_info.outputs.upload_url }}
-        asset_path: ./dist/analisador_lexico.py.exe
+        asset_path: D:\a\analisador-lexico\analisador-lexico\build\analisador_lexico\analisador_lexico.exe
         asset_name: analisador_lexico.py.exe
         asset_content_type: application/vnd.microsoft.portable-executabl
