@@ -23,7 +23,11 @@ python analisador_lexico.py testes/geral/teste-geral-2.c
 
 Desta forma o programa fará a análise léxica do arquivo `teste-geral-2.c` localizado dentro de `/testes/geral`
 
-No Windows é possível rodar o programa utilizando o arquivo executável em `/dist/`
+No Windows é possível rodar o programa utilizando o arquivo executável em `/dist/`, para isso você deve especificar o caminho do arquivo de teste você deseja utilizar. No exemplo abaixo, será rodando o executável utilizando o arquivo de testes `teste-geral-2.c` que está dentro de `/testes/geral/`.
+
+```
+analisador_lexico.exe ./testes/geral/teste-geral-2.c
+```
 
 ## Resultados
 
