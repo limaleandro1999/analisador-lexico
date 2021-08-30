@@ -5,6 +5,7 @@ Arquivo de teste
 */
 
 int main() {
+  int numeros[5] = {10, 20, 30, 40, 50};
   int INT=8,IF=0;
   float test=1.2;
   INT+=2

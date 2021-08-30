@@ -33,9 +33,37 @@ operadores_dict = {
   ";": "SEMI",
   ",": "COMA",
   "&": "ADDR",
-  ".": "STR_ACCS"
+  ".": "STR_ACCS",
+  ":": "CASE_SEP",
 }
-operadores_combinaveis = ['=', '-', '+', '/', '*', '!', '>', '<']
+reservada_list = [
+  'int',
+  'float',
+  'double',
+  'char',
+  'long',
+  'signed',
+  'unsigned',
+  'if',
+  'else',
+  'printf',
+  'for',
+  'while',
+  'return',
+  'continue',
+  'break',
+  'read',
+  'case',
+  'const',
+  'do',
+  'switch',
+  'void'
+  'default'
+  'static',
+  'struct',
+  'typedef'
+]
+operadores_combinaveis = ['=', '-', '+', '/', '*', '!', '>', '<', '&', '|']
 separadores = [';', '[', ']', ')', '(', ')', '{', '}', ',', '=', '.']
 operadores = ['-', '+', '/', '*', '^']
 lista_erros = []
@@ -54,12 +82,12 @@ def add_linha_coluna(token, linha, coluna):
 
 def obter_token(elemento):
   elemento_valido = operadores_dict.keys().__contains__(elemento)
-  tipo = operadores_dict[elemento] if elemento_valido else"Token Inválido"
+  tipo = operadores_dict[elemento] if elemento_valido else "Token Inválido"
   return tipo
 
 def verifica_erro(elemento, token_geral, lista_erros, linha, coluna):
   """Se não encontrar um erro retorna 1"""
-  separadores = [';', '[', ']', ')', '(', ')', '{', '}', ',', '=', '.', '-', '+', '/', '*', '!', '>', '<']
+  separadores = [';', '[', ']', ')', '(', ')', '{', '}', ',', '=', '.', '-', '+', '/', '*', '!', '>', '<', '&', '|', ':', '%']
   if not re.match("[\w]", elemento):
     if elemento not in separadores:
       if not re.search(r"\s", elemento):
@@ -68,7 +96,7 @@ def verifica_erro(elemento, token_geral, lista_erros, linha, coluna):
       return 0
   return 1
 
-def verifica_identificador(elemento):
+def verifica_separador(elemento):
   """Verifica se o elemento é um separador dos numeros"""
   if(re.match(r"[\w]", elemento)):
     return 0
@@ -85,33 +113,6 @@ def verifica_numero(elemento):
 def verifica_reservada(token):
   """Verifica se determinado token é
   reservado e retorna um código para o mesmo"""
-  reservada_list = [
-    'int',
-    'float',
-    'double',
-    'char',
-    'long',
-    'signed',
-    'unsigned',
-    'if',
-    'else',
-    'printf',
-    'for',
-    'while',
-    'return',
-    'continue',
-    'break',
-    'read',
-    'case',
-    'const',
-    'do',
-    'switch',
-    'void'
-    'default'
-    'static',
-    'struct',
-    'typedef'
-  ]
   cont = 0
   for i in reservada_list:
     cont = cont + 1
@@ -151,7 +152,7 @@ def open_file():
     nome = sys.argv[1]
     arquivo = open(nome, "r")
   except Exception as e:
-    arquivo = open("teste2.c", "r")
+    arquivo = open("testes/geral/teste-geral.c", "r")
   return arquivo
 
 arquivo = open_file()
@@ -181,22 +182,21 @@ for i in arquivo:
         """Pesquisa por Literal"""
         estado = 3 # Literal
 
-      if verifica_numero(k) and verifica_identificador(k) and estado == 0 and estado != 4:
+      if verifica_numero(k) and verifica_separador(k) and estado == 0 and estado != 4:
         """Se não for um identificador valido então é um separador"""
         if verifica_erro(k, token_geral, lista_erros, linha, coluna):
           estado = 5
-          # token_geral.append([k])
 
     if estado == 1:
       """Valida Identificador"""
       if re.match(r"([\w])", k):
         token = token + k
-      if verifica_identificador(k):
+      if verifica_separador(k):
         """Lista com separadores"""
         estado = 0
         if verifica_reservada(token):
-          tabela_token[id_tabela] = ["Res Cod: " + str(verifica_reservada(token)), token, add_linha_coluna(token, linha, coluna)]
-          token_geral.append(["Res Cod: " + str(verifica_reservada(token)), token, id_tabela])
+          tabela_token[id_tabela] = [token.upper(), add_linha_coluna(token, linha, coluna)]
+          token_geral.append([token.upper(), id_tabela])
 
           if k != " ":
             if verifica_erro(k, token_geral, lista_erros, linha, coluna):
@@ -206,7 +206,7 @@ for i in arquivo:
           tabela_token[id_tabela] = ["ID", token, add_linha_coluna(token, linha, coluna)]
           token_geral.append(["ID", token, id_tabela])
 
-          if verifica_identificador(k):
+          if verifica_separador(k):
             """Vai inserir o k como separador """
             if k != re.match(r"\s", k):
               if verifica_erro(k, token_geral, lista_erros, linha, coluna):
@@ -238,13 +238,6 @@ for i in arquivo:
             lista_erros.append([numerico, add_linha_coluna(numerico, linha, coluna)])
             numerico = ""
             estado = 0
-      else:
-        if verifica_numero(k):
-          "Armazena token de separadores"
-          if k != " ":
-            if verifica_erro(k, token_geral, lista_erros, linha, coluna):
-              token_geral.append([obter_token(k)])
-          estado = 0
 
     if estado == 3:
       """Identifica Literal"""
@@ -271,7 +264,7 @@ for i in arquivo:
     
     if estado == 5:
       """Indentifica operadores"""
-      if verifica_identificador(k) and re.match(r"\s|\n", k) == None:
+      if verifica_separador(k) and re.match(r"\s|\n", k) == None:
         if k in operadores_combinaveis:
           token += k
         else:
@@ -291,8 +284,8 @@ for i in arquivo:
         elif re.match(r"[\"]", k):
           token = k
           estado = 3
-
-        estado = 0
+        else:
+          estado = 0
 
 if __name__ == '__main__':
   imprime_token(token_geral)
