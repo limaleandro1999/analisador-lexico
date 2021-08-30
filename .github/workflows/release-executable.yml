@@ -19,7 +19,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ steps.date.outputs.date }}
+        tag_name: ${{ steps.random-number-generator.outputs.random-id }}
         release_name: ${{ steps.date.outputs.date }}
         draft: false
         prerelease: false
