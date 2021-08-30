@@ -23,6 +23,8 @@ python analisador_lexico.py testes/geral/teste-geral-2.c
 
 Desta forma o programa fará a análise léxica do arquivo `teste-geral-2.c` localizado dentro de `/testes/geral`
 
+No Windows é possível rodar o programa utilizando o arquivo executável em `/dist/`
+
 ## Resultados
 
 O analisador gerará 3 arquivos: um arquivo contendo os erros achados na análise léxica, uma tabela de simbolos e uma tabela com os tokens de saída.
