@@ -73,7 +73,7 @@ linha = 0
 coluna = 0
 id_tabela = 0
 acumula_comentario = ""
-comentario_inline = False
+comentario_single_line = False
 
 def add_linha_coluna(token, linha, coluna):
   """Adiciona linha e coluna"""
@@ -164,25 +164,25 @@ for i in arquivo:
     coluna = coluna + 1
     if estado == 0:
       """Define o estado inicial"""
-      if k == "/" and (i[coluna] == "*" or i[coluna] == "/") and estado == 0 and estado != 4:
+      if k == "/" and (i[coluna] == "*" or i[coluna] == "/") and estado == 0:
         """Comentario"""
         estado = 4
-        comentario_inline = True if i[coluna] == "/" else False
-        token_geral.append(["//"] if i[coluna] == "/" else ["/*"])
-      if re.search(r"^(#)", i) and estado == 0 and estado != 4:
+        comentario_single_line = True if i[coluna] == "/" else False
+        token_geral.append(["//"] if comentario_single_line else ["/*"])
+      if re.search(r"^(#)", i) and estado == 0:
         """ignora o stdio"""
         break
-      if re.match(r"([A-Za-z_])", k) and estado == 0 and estado != 4:
+      if re.match(r"([A-Za-z_])", k) and estado == 0:
         """Pesquisa por identificadores validos"""
         estado = 1  # Identificador
-      if re.match(r"[0-9]", k) and estado == 0 and estado != 4:
+      if re.match(r"[0-9]", k) and estado == 0:
         """Pesquisa por Constante Numérica"""
         estado = 2  # Constante Numérica
-      if re.match(r"[\"]", k) and estado == 0 and estado != 4:
+      if re.match(r"[\"]", k) and estado == 0:
         """Pesquisa por Literal"""
         estado = 3 # Literal
 
-      if verifica_numero(k) and verifica_separador(k) and estado == 0 and estado != 4:
+      if verifica_numero(k) and verifica_separador(k) and estado == 0:
         """Se não for um identificador valido então é um separador"""
         if verifica_erro(k, token_geral, lista_erros, linha, coluna):
           estado = 5
@@ -190,7 +190,7 @@ for i in arquivo:
     if estado == 1:
       """Valida Identificador"""
       if re.match(r"([\w])", k):
-        token = token + k
+        token += k
       if verifica_separador(k):
         """Lista com separadores"""
         estado = 0
@@ -198,23 +198,17 @@ for i in arquivo:
           tabela_token[id_tabela] = [token.upper(), add_linha_coluna(token, linha, coluna)]
           token_geral.append([token.upper(), id_tabela])
 
-          if k != " ":
-            if verifica_erro(k, token_geral, lista_erros, linha, coluna):
-              token_geral.append([obter_token(k)])
-          token = ""
         else:
           tabela_token[id_tabela] = ["ID", token, add_linha_coluna(token, linha, coluna)]
           token_geral.append(["ID", token, id_tabela])
 
-          if verifica_separador(k):
-            """Vai inserir o k como separador """
-            if k != re.match(r"\s", k):
-              if verifica_erro(k, token_geral, lista_erros, linha, coluna):
-                """Se não encontrar um erro insere"""
-                estado = 5
-              else:
-                estado = 0
-          token = ""
+        if re.match(r"\s", k) == None:
+          if verifica_erro(k, token_geral, lista_erros, linha, coluna):
+            """Se não encontrar um erro insere"""
+            estado = 5
+          else:
+            estado = 0
+        token = ""
 
     if estado == 2:
       """Estado de indentificacao de constante numerica"""
@@ -253,8 +247,8 @@ for i in arquivo:
 
     if estado == 4:
       """Incrementa comentarios"""
-      acumula_comentario = acumula_comentario + k
-      if comentario_inline:
+      acumula_comentario += k
+      if comentario_single_line:
         if coluna == len(i):
           estado = 0
       else:
